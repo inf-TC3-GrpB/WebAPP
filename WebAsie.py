@@ -240,7 +240,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
   # On envoie les entêtes et le corps fourni
   #
   def send(self,body,headers=[]):
-    print(body)
+#    print(body)
     # on encode la chaine de caractères à envoyer
     encoded = bytes(body, 'UTF-8')
     

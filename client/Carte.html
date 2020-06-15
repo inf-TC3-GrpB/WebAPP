@@ -9,95 +9,99 @@
 <meta charset="utf-8">
   
 <!-- Récupération de la liste des lieux insolites au chargement de la page -->
-<body onload="load_data();">
+<body>
 
-  <div id='gauche'></div>
-  <h1>Asia</h1>
-
-
-
-  <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
+    <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
   <div id="map" style="margin-bottom:1.33em"></div>  
-
+  
+  <div id='gauche'>
+  <h1>Asia</h1>
   <!-- Zone pour l'affichage dynamique des descriptions -->
-  <div class='hidden'>
+  <div id='Pays_info' class='hidden'>
       <h2 id='country_name'></h2>
-      <div><span class='label'></span><span class='value' id='capital'></span></div>
-      <div><span class='label'></span><span class='value' id='latitude'></span></div>
-      <div><span class='label'></span><span class='value' id='longitude'></span></div>
+      <div><span class='label'>Capital : </span><span class='value' id='capital'></span></div>
+      <div><span class='label'>Coordonnée : </span><span class='value' id='latitude'></span><span class='value' id='longitude'></span></div>
       <div><span class="label">Read more:</span><a id="wps" href="" class="lien" >wikipedia</a></div>
-
   </div>
+
+  <div id="error_msg"></div>
+  </div>
+
  </body>
 
 
-<script>
+ <script>
+// création d'une carte dans la balise div "map",
+var map = L.map('map').setView([35.775,90.83], 2.5);
 
-// Création d'une carte dans la balise div "map",
-// et position de la vue sur un point donné et un niveau de zoom
-var map = L.map('map').setView([35.775,90.83], 2);
-
-// Ajout d'une couche de dalles OpenStreetMap
+// ajout d'une couche de dalles OpenStreetMap
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-     }).addTo(map);
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
-// Fonction appelée au chargement de la page
-function load_data () {
+AJAX('/service/countries/asia',load_data.bind(4),display_error);
 
-  // objet pour l'envoi d'une requête Ajax
-  var xhr = new XMLHttpRequest();
+// gestion de la réponse à la requête de récupération de la liste des pays
+function load_data(resp) {
+  var data = JSON.parse(resp);
 
-  // fonction appelée lorsque la réponse à la requête (liste des lieux insolites) sera arrivée
+    data.forEach(country => {
+      var marker = L.marker(
+        [country.latitude,country.longitude]).addTo(map)
+      .bindPopup(country.wp)
+      .on('mouseover',e => e.target.openPopup())
+      .on('mouseout',e => e.target.closePopup())
+      .addEventListener('click',marker_click)
+      .idnum = country.wp;
+    });
+ // }
+}
+
+
+
+// gestion d'une réponse d'erreur
+function display_error(code,message) {
+  window.Pays_info.classList.add('hidden');
+  window.error_msg.innerHTML = this.statusText;
+}
+
+// gestion des requêtes AJAX
+function AJAX(url,cb,error) {
+  var xhr = new XMLHttpRequest(); 
+  xhr.open('GET',url,true);
   xhr.onload = function() {
-
-    // transformation des données renvoyées par le serveur
-    // responseText est du type string, data est une liste
-    var data = JSON.parse(this.responseText);
-
-    // boucle sur les lieux
-    for ( n = 0; n < data.length; n++ ) {
-      // insertion d'un marqueur à la position du lieu,
-      // attachement d'une popup, capture de l'événement 'clic'
-      // ajout d'une propriété personnalisée au marqueur
-      L.marker([data[n].latitude,data[n].longitude]).addTo(map)
-       .bindPopup(data[n].wp)
-       .addEventListener('click',OnMarkerClick)
-       .idnum = data[n].wp;
-    }
+    if ( this.status = 200 ) cb(this.responseText);
+    else error(this.status,this.statusText);
   };
-
-  // Envoi de la requête Ajax pour la récupération de la liste des lieux insolites
-  xhr.open('GET','/service/countries/asia',true);
   xhr.send();
 }
 
-// Fonction appelée lors d'un clic sur un marqueur
-function OnMarkerClick (e) {
 
-  // objet pour l'envoi d'une requête Ajax
-  var xhr = new XMLHttpRequest();
-
-  // fonction appelée lorsque la réponse à la requête (description d'un lieu insolite) sera arrivée
-  xhr.onload = function() {
-
-    // transformation des données renvoyées par le serveur
-    // responseText est du type string, data est un objet
-
-       var data = JSON.parse(this.responseText);
-
-       window.country_name.textContent = data.name;
-       window.capital.textContent = 'Capital:  ' + data.capital;
-       window.latitude.textContent = 'Latitude:  '+data.latitude.toFixed(3);
-       window.longitude.textContent = 'Longitude:  '+data.longitude.toFixed(3);
-       window.wps.href = 'https://en.wikipedia.org/wiki/'+data.wp;
-  };
-
-  // Le numéro du lieu est récupéré via la propriété personnalisée du marqueur
-  var idnum = e.target.idnum
-
-  // Envoi de la requête Ajax pour la récupération de la description du lieu de numéro idnum
-  xhr.open('GET','/service/country/'+idnum,true);
-  xhr.send();
+// gestion du clic sur un marqueur
+function marker_click(e) {
+  var url = '/service/country/'+e.target.idnum;
+  AJAX( url,display_data,display_error);
 }
+function display_data(response) {
+  var data = JSON.parse(response);
+
+  window.error_msg.innerHTML = ''
+  window.Pays_info.classList.remove('hidden');
+  //window.Pays_info.style.display = 'block';
+  window.country_name.textContent = data.name;
+  window.capital.textContent = data.capital;
+  window.latitude.textContent = '('+data.latitude.toFixed(3)+' N,';
+  window.longitude.textContent = data.longitude.toFixed(3)+' E)';
+  window.wp.href = 'https://en.wikipedia.org/wiki/'+data.wp;
+  
+}
+
+// récupération des coordonnées du clic,
+// pour aide au positonnement manuel éventuel des capitales
+window.map.addEventListener('dblclick', e => {
+   console.log(e);
+   lat = e.latlng.lat;
+   lon = e.latlng.lng;
+   console.log(lat,lon);
+});
 </script>
