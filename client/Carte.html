@@ -11,18 +11,21 @@
 <!-- Récupération de la liste des lieux insolites au chargement de la page -->
 <body onload="load_data();">
 
-  <h1>Mes jardins</h1>
-  <div>
+  <div id='gauche'></div>
+  <h1>Asia</h1>
+
+
 
   <!-- Zone pour l'insertion de la carte OSM via Leaflet -->
   <div id="map" style="margin-bottom:1.33em"></div>  
 
   <!-- Zone pour l'affichage dynamique des descriptions -->
-  
-      <div id='country_name'></div>
-      <div id='capital'></div>
-      <div id='latitude'></div>
-      <div id='longitude'></div>
+  <div class='hidden'>
+      <h2 id='country_name'></h2>
+      <div><span class='label'></span><span class='value' id='capital'></span></div>
+      <div><span class='label'></span><span class='value' id='latitude'></span></div>
+      <div><span class='label'></span><span class='value' id='longitude'></span></div>
+      <div><span class="label">Read more:</span><a id="wps" href="" class="lien" >wikipedia</a></div>
 
   </div>
  </body>
@@ -58,7 +61,7 @@ function load_data () {
       // attachement d'une popup, capture de l'événement 'clic'
       // ajout d'une propriété personnalisée au marqueur
       L.marker([data[n].latitude,data[n].longitude]).addTo(map)
-       .bindPopup('Lieu = '+data[n].wp)
+       .bindPopup(data[n].wp)
        .addEventListener('click',OnMarkerClick)
        .idnum = data[n].wp;
     }
@@ -87,7 +90,7 @@ function OnMarkerClick (e) {
        window.capital.textContent = 'Capital:  ' + data.capital;
        window.latitude.textContent = 'Latitude:  '+data.latitude.toFixed(3);
        window.longitude.textContent = 'Longitude:  '+data.longitude.toFixed(3);
-       window.wps.href = 'https://en.wikipedia.org/wiki/'+data.wp;//ne sais pas comment afficher ce lien dans Page
+       window.wps.href = 'https://en.wikipedia.org/wiki/'+data.wp;
   };
 
   // Le numéro du lieu est récupéré via la propriété personnalisée du marqueur
