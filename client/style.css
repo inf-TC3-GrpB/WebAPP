@@ -1,17 +1,6 @@
 ﻿/* fond de page */
-/*
-body {
-  background-image: linear-gradient(0deg, slateblue, red, red);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  color: white;
-  height: 100vh;
-  margin: 0;
-  border: 1px solid transparent;
-  box-sizing: border-box;
-}
-*/
-/* bandeau de titre */
+
+/* bandeau de titre Ici: Asia; */
 h1 { 
   color: red;
   border: none;
@@ -22,8 +11,7 @@ h1 {
 
 h2 {
   margin-top: 0;
-  color: #581845;
-  font-family: 'Bungee';
+  color: #003399;
   font-size: 25px;
   display: block;
   margin-left: auto;
@@ -36,19 +24,14 @@ body > * {   padding-left: 10px; }
 label { display: inline-block;
   padding-bottom: 0.5em; }
 label span { display: inline-block; width: 5em; }
-/*
-body {
-  font-family:  'Bungee';
-  color:#581845;
-  font-size: 16px;
-}*/
-body {
+
+body { /*toute la page*/
   margin: 20px;
   padding: 50px;
-  border: 1px solid #143275;
+  border: 1px solid transparent;
   border-radius: 5px;
   box-shadow: 3px 3px 3px #444;
-  background-image: linear-gradient(to bottom right, #FF5733, #C70039 , #900C3F,#581845  ) ;
+  background-image: linear-gradient(0deg, slateblue, yellow, red);
 
 }
 
