@@ -18,7 +18,8 @@
   <h1>Asia</h1>
   <!-- Zone pour l'affichage dynamique des descriptions -->
   <div id='Pays_info' class='hidden'>
-      <h2 id='country_name'></h2>
+      <h2 id='district_name'></h2>
+      <div><img id='flag'></img></div>
       <div><span class='label'>Capital : </span><span class='value' id='capital'></span></div>
       <div><span class='label'>Coordonnée : </span><span class='value' id='latitude'></span><span class='value' id='longitude'></span></div>
       <div><span class="label">Read more:</span><a id="wps" href="" class="lien" >wikipedia</a></div>
@@ -32,7 +33,7 @@
 
  <script>
 // création d'une carte dans la balise div "map",
-var map = L.map('map').setView([35.775,90.83], 2.5);
+var map = L.map('map').setView([30.775,90.83], 2.5);
 
 // ajout d'une couche de dalles OpenStreetMap
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -84,24 +85,19 @@ function marker_click(e) {
 }
 function display_data(response) {
   var data = JSON.parse(response);
+  var urlflag = '/images/Flag_of_'+data.wp+'.png';
+  var myp = document.getElementById('flag'); //获得dom对象
 
   window.error_msg.innerHTML = ''
   window.Pays_info.classList.remove('hidden');
-  //window.Pays_info.style.display = 'block';
-  window.country_name.textContent = data.name;
+  window.Pays_info.style.display = 'block';
+  window.district_name.textContent = data.name;
   window.capital.textContent = data.capital;
   window.latitude.textContent = '('+data.latitude.toFixed(3)+' N,';
   window.longitude.textContent = data.longitude.toFixed(3)+' E)';
-  window.wp.href = 'https://en.wikipedia.org/wiki/'+data.wp;
+  window.wps.href = 'https://en.wikipedia.org/wiki/'+data.wp;
+  myp.src=urlflag;
   
 }
 
-// récupération des coordonnées du clic,
-// pour aide au positonnement manuel éventuel des capitales
-window.map.addEventListener('dblclick', e => {
-   console.log(e);
-   lat = e.latlng.lat;
-   lon = e.latlng.lng;
-   console.log(lat,lon);
-});
 </script>

@@ -35,6 +35,11 @@ body { /*toute la page*/
 
 }
 
+img{
+  width: 150px;
+  height: 100px;
+}
+
 .sel {
   background-color: #d9ffb3; 
   border: none;
