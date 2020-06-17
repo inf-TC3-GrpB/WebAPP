@@ -1,0 +1,9 @@
+h1, div, p, li { color: red; }
+.ok { color: white; }
+#special { color: white; }
+#page {
+	border-style: solid;
+	border-width: 2px;
+	border-color: black;
+	background-color: black
+}
