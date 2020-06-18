@@ -43,7 +43,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler): # définition du nou
             elif self.path[0:8]=='/service':
                 
                 if self.path[0:18]=='/service/countries':
-                    self.lister_pays()  #affiche une page contenant la liste des pays et leurs caractéristiques si l'URL correspond                
+                    #self.lister_pays()  #affiche une page contenant la liste des pays et leurs caractéristiques si l'URL correspond                
                     self.carac_pays_json()   #envoie les informations json
                 
                 elif re_pays!=None:  #si /country/France par ex est dans le path
