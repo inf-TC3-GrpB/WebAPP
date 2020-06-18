@@ -48,7 +48,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler): # définition du nou
                 
                 elif re_pays!=None:  #si /country/France par ex est dans le path
                     pays=re_pays.group(1)  #récupère la string contenant le nom du pays dans l'URL
-                    self.carac_pays_modif(pays)   #affiche une page contenant les caractéristiques d'un pays si l'URL correspond                   
+                    #self.carac_pays_modif(pays)   #affiche une page contenant les caractéristiques d'un pays si l'URL correspond                   
                     self.carac_pays_json(pays)  #envoie les informations json  
             
             
