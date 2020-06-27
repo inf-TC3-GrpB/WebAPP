@@ -79,7 +79,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler): # définition du nou
         [self.send_header(*t) for t in headers] # on envoie les lignes d'entête et la ligne vide
         self.send_header('Content-Length',int(len(encoded)))
         self.end_headers()
-        print('Test: ',encoded)        
+        #print('Test: ',encoded)
         self.wfile.write(encoded) # on envoie le corps de la réponse
         
     
