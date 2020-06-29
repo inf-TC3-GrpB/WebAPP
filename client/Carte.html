@@ -22,6 +22,8 @@
       <div><img id='flag'></img></div>
       <div><span class='label'>Capital : </span><span class='value' id='capital'></span></div>
       <div><span class='label'>Coordonnée : </span><span class='value' id='latitude'></span><span class='value' id='longitude'></span></div>
+    
+      <div><span class='label'>Population : </span><span class='value' id='population'></span></div>
       <div><span class="label">Read more:</span><a id="wps" href="" class="lien" >wikipedia</a></div>
   </div>
 
@@ -93,6 +95,7 @@ function display_data(response) {
   window.Pays_info.style.display = 'block';
   window.district_name.textContent = data.name;
   window.capital.textContent = data.capital;
+  window.population.textContent = data.Population;
   window.latitude.textContent = '('+data.latitude.toFixed(3)+' N,';
   window.longitude.textContent = data.longitude.toFixed(3)+' E)';
   window.wps.href = 'https://en.wikipedia.org/wiki/'+data.wp;
